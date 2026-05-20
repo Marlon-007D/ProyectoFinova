@@ -1,4 +1,4 @@
-<img width="1115" height="548" alt="image" src="https://github.com/user-attachments/assets/ac441108-938e-4e20-8e9b-8202166081fb" /># FINOVA 
+# FINOVA 
 ## Descripción
 FINOVA es una aplicación web SPA desarrollada en Angular para la gestión de finanzas personales.
 La plataforma permite visualizar ingresos, gastos, presupuestos, metas de ahorro y cuentas bancarias en una sola interfaz moderna, intuitiva y responsive.
