@@ -37,7 +37,7 @@ FINOVA ayuda a:
 Clonar el repositorio:
 
 ```bash
-git clone URL_DEL_REPOSITORIO
+git clone https://github.com/Marlon-007D/ProyectoFinova
 ```
 
 Ingresar a la carpeta del proyecto:
