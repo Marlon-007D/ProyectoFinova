@@ -1,4 +1,4 @@
-# FINOVA 
+<img width="1115" height="548" alt="image" src="https://github.com/user-attachments/assets/ac441108-938e-4e20-8e9b-8202166081fb" /># FINOVA 
 ## Descripción
 FINOVA es una aplicación web SPA desarrollada en Angular para la gestión de finanzas personales.
 La plataforma permite visualizar ingresos, gastos, presupuestos, metas de ahorro y cuentas bancarias en una sola interfaz moderna, intuitiva y responsive.
@@ -83,22 +83,27 @@ src/
 ## Capturas del sistema
 
 ### Login
-Agregar captura aquí.
+<img width="1913" height="939" alt="Login" src="https://github.com/user-attachments/assets/a2d8facf-7414-457c-a326-c3276f18b301" />
 
 ### Dashboard
-Agregar captura aquí.
+<img width="1919" height="875" alt="Dashboard" src="https://github.com/user-attachments/assets/062b3a07-9f55-4537-80de-6470f32ad0bc" />
+
 
 ### Movimientos
-Agregar captura aquí.
+<img width="1534" height="756" alt="Movimientos" src="https://github.com/user-attachments/assets/b9e73744-483b-41c9-ba07-e2afcbcc6e1e" />
 
 ### Presupuestos
-Agregar captura aquí.
+<img width="1917" height="943" alt="Presupuesto" src="https://github.com/user-attachments/assets/18983cdd-5112-4fdc-9010-c99516f4ac8f" />
+
 
 ### Metas de ahorro
-Agregar captura aquí.
+<img width="1916" height="948" alt="Ahorro" src="https://github.com/user-attachments/assets/2babf779-f9dd-4779-96ed-69cd4eaf6d78" />
+
 
 ### Bancos
-Agregar captura aquí.
+<img width="1906" height="942" alt="Bancos" src="https://github.com/user-attachments/assets/e9a3ef38-db2d-4105-9b5e-801c042fcedf" />
+
+
 
 ## Responsive Design
 La aplicación fue desarrollada utilizando diseño responsive para adaptarse a:
