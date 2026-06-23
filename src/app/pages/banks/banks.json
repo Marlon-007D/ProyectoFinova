@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Banco Pichincha",
+    "type": "Cuenta principal",
+    "balance": "$5,200",
+    "color": "emerald"
+  },
+  {
+    "name": "Produbanco",
+    "type": "Cuenta de ahorro",
+    "balance": "$2,900",
+    "color": "blue"
+  },
+  {
+    "name": "Banco Guayaquil",
+    "type": "Cuenta secundaria",
+    "balance": "$4,350",
+    "color": "amber"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "stats": [
+    {
+      "title": "Balance Total",
+      "amount": "$12,450",
+      "color": "emerald"
+    },
+    {
+      "title": "Ingresos",
+      "amount": "$4,200",
+      "color": "blue"
+    },
+    {
+      "title": "Gastos",
+      "amount": "$1,780",
+      "color": "rose"
+    },
+    {
+      "title": "Ahorros",
+      "amount": "$2,900",
+      "color": "amber"
+    }
+  ],
+
+  "budgets": [
+    {
+      "title": "Comida",
+      "spent": 300,
+      "total": 500,
+      "progress": 60,
+      "color": "emerald"
+    },
+    {
+      "title": "Transporte",
+      "spent": 120,
+      "total": 200,
+      "progress": 60,
+      "color": "blue"
+    },
+    {
+      "title": "Entretenimiento",
+      "spent": 80,
+      "total": 100,
+      "progress": 80,
+      "color": "amber"
+    }
+  ]
+}

@@ -1,12 +1,28 @@
 import { Component } from '@angular/core';
-import { RouterModule, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink, RouterModule } from '@angular/router';
+import { ThemeService } from '../../services/theme';
+
+
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterModule, RouterLink], 
-  templateUrl: './main-layout.html'
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    RouterModule
+  ],
+  templateUrl: './main-layout.html',
+  styleUrl: './main-layout.css'
 })
 export class MainLayoutComponent {
-  isMenuOpen: boolean = false;
+
+  isMenuOpen = false;
+
+  constructor(
+    public theme: ThemeService
+  ){}
+
 }

@@ -1,0 +1,44 @@
+{
+  "goals": [
+    {
+      "title": "Laptop",
+      "saved": 1300,
+      "total": 2000,
+      "progress": 65,
+      "remaining": 700,
+      "color": "emerald"
+    },
+    {
+      "title": "Viaje a la Playa",
+      "saved": 400,
+      "total": 1000,
+      "progress": 40,
+      "remaining": 600,
+      "color": "blue"
+    },
+    {
+      "title": "Mazda CX-30",
+      "saved": 3000,
+      "total": 15000,
+      "progress": 20,
+      "remaining": 12000,
+      "color": "amber"
+    },
+    {
+      "title": "Fondo Emergencia",
+      "saved": 1700,
+      "total": 2000,
+      "progress": 85,
+      "remaining": 300,
+      "color": "rose"
+    },
+    {
+      "title": "Fondo Emergencia",
+      "saved": 1700,
+      "total": 5000,
+      "progress": 34,
+      "remaining": 3300,
+      "color": "violet"
+    }
+  ]
+}

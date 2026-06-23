@@ -1,59 +1,114 @@
-# AhorraMAXApp
+# FINOVA 
+## Descripción
+FINOVA es una aplicación web SPA desarrollada en Angular para la gestión de finanzas personales.
+La plataforma permite visualizar ingresos, gastos, presupuestos, metas de ahorro y cuentas bancarias en una sola interfaz moderna, intuitiva y responsive.
+## Idea del proyecto
+El proyecto nace con el objetivo de ofrecer una solución moderna para el control financiero personal, permitiendo a los usuarios visualizar y organizar su información económica de manera sencilla y eficiente.
+## Problema que resuelve
+Muchas personas no cuentan con herramientas simples y visuales para administrar correctamente sus finanzas personales.
+FINOVA ayuda a:
+- Organizar ingresos y gastos.
+- Visualizar presupuestos.
+- Llevar control de metas de ahorro.
+- Analizar movimientos financieros mediante gráficos.
+## Público objetivo
+- Estudiantes
+- Trabajadores
+- Personas interesadas en controlar mejor sus finanzas
+- Usuarios que buscan herramientas financieras modernas y simples
+## Framework seleccionado
+- Angular
+## Tecnologías utilizadas
+- Angular
+- TailwindCSS
+- TypeScript
+- Chart.js
+- HTML5
+## Características principales
+- Dashboard financiero interactivo
+- Registro de movimientos
+- Gestión de presupuestos
+- Metas de ahorro
+- Visualización de gráficos financieros
+- Simulación de conexión bancaria
+- Navegación SPA
+- Diseño responsive
+## Instalación y ejecución
+Clonar el repositorio:
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+```bash
+git clone https://github.com/Marlon-007D/ProyectoFinova
+```
 
-## Development server
+Ingresar a la carpeta del proyecto:
 
-To start a local development server, run:
+```bash
+cd FINOVA
+```
+
+Instalar dependencias:
+
+```bash
+npm install
+```
+
+Ejecutar proyecto:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Abrir en navegador:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+http://localhost:4200
 ```
+## Estructura básica del proyecto
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+```text
+src/
+ ├── app/
+ │   ├── pages/
+ │   │   ├── banks/
+ │   │   ├── budgets/
+ │   │   ├── dashboard/
+ │   │   ├── login/
+ │   │   ├── main-layout/
+ │   │   ├── savings/
+ │   │   └── transactions/
+ │   ├── app.routes.ts
+ │   ├── app.html
+ │   └── app.ts
 ```
+## Capturas del sistema
 
-## Building
+### Login
+<img width="1913" height="939" alt="Login" src="https://github.com/user-attachments/assets/a2d8facf-7414-457c-a326-c3276f18b301" />
 
-To build the project run:
+### Dashboard
+<img width="1919" height="875" alt="Dashboard" src="https://github.com/user-attachments/assets/062b3a07-9f55-4537-80de-6470f32ad0bc" />
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Movimientos
+<img width="1534" height="756" alt="Movimientos" src="https://github.com/user-attachments/assets/b9e73744-483b-41c9-ba07-e2afcbcc6e1e" />
 
-## Running unit tests
+### Presupuestos
+<img width="1917" height="943" alt="Presupuesto" src="https://github.com/user-attachments/assets/18983cdd-5112-4fdc-9010-c99516f4ac8f" />
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
 
-```bash
-ng test
-```
+### Metas de ahorro
+<img width="1916" height="948" alt="Ahorro" src="https://github.com/user-attachments/assets/2babf779-f9dd-4779-96ed-69cd4eaf6d78" />
 
-## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+### Bancos
+<img width="1906" height="942" alt="Bancos" src="https://github.com/user-attachments/assets/e9a3ef38-db2d-4105-9b5e-801c042fcedf" />
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Responsive Design
+La aplicación fue desarrollada utilizando diseño responsive para adaptarse a:
+- Telefonos
+- Tablets
+- Computadoras
+## Integrantes
+- Marlon Demera
+## Asignatura
+Aplicaciones de Tecnologías Web

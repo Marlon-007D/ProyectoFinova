@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
+import { NgClass } from '@angular/common';
+
+import banksData from './banks.json';
 
 @Component({
   selector: 'app-banks',
-  imports: [],
+  standalone: true,
+  imports: [NgClass],
   templateUrl: './banks.html',
-  styleUrl: './banks.css',
+  styleUrl: './banks.css'
 })
-export class BanksComponent {}
+export class BanksComponent {
+
+  banks = banksData;
+
+}

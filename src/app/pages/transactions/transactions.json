@@ -1,0 +1,32 @@
+{
+  "transactions": [
+    {
+      "date": "18/05/2026",
+      "description": "Netflix",
+      "type": "Gasto",
+      "amount": "-$12.00",
+      "color": "rose"
+    },
+    {
+      "date": "18/05/2026",
+      "description": "Salario",
+      "type": "Ingreso",
+      "amount": "+$900.00",
+      "color": "emerald"
+    },
+    {
+      "date": "17/05/2026",
+      "description": "Uber",
+      "type": "Gasto",
+      "amount": "-$25.00",
+      "color": "rose"
+    },
+    {
+      "date": "27/05/2026",
+      "description": "Steam",
+      "type": "Gasto",
+      "amount": "-$50.00",
+      "color": "rose"
+    }
+  ]
+}

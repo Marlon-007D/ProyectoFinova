@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
+import dashboardData from './dashboard.json';
+import { NgClass } from '@angular/common';
+
 
 import {
   Chart,
@@ -27,11 +30,15 @@ Chart.register(
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, NgClass],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
 export class DashboardComponent {
+  
+   stats = dashboardData.stats;
+
+  budgets = dashboardData.budgets;
 
   public lineChartData = {
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],

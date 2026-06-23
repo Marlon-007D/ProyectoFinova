@@ -1,0 +1,27 @@
+# Spring Boot target directory
+/target
+
+# Maven local repository
+/.mvn
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+/.idea
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode
+
+# Logs
+*.log
+
+# Generated files
+/*.class
+
+# Application properties
+/application.properties

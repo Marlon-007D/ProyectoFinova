@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Alimentación",
+    "spent": 300,
+    "total": 500,
+    "progress": 60,
+    "color": "emerald"
+  },
+  {
+    "title": "Transporte",
+    "spent": 90,
+    "total": 200,
+    "progress": 45,
+    "color": "blue"
+  },
+  {
+    "title": "Entretenimiento",
+    "spent": 160,
+    "total": 200,
+    "progress": 80,
+    "color": "amber"
+  },
+  {
+    "title": "Educación",
+    "spent": 70,
+    "total": 200,
+    "progress": 35,
+    "color": "rose"
+  }
+]

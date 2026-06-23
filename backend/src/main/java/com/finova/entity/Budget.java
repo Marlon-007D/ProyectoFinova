@@ -1,0 +1,92 @@
+package com.finova.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "budgets")
+public class Budget {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank(message = "El título del presupuesto es obligatorio")
+    private String title;
+
+    @NotNull(message = "El valor gastado es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = true, message = "El valor gastado debe ser mayor o igual a cero")
+    private Double spent;
+
+    @NotNull(message = "El valor total es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = true, message = "El total debe ser mayor o igual a cero")
+    private Double total;
+
+    @NotNull(message = "El progreso es obligatorio")
+    @Column(nullable = false)
+    private Integer progress;
+
+    private String color;
+
+    public Budget() {
+    }
+
+    public Budget(Long id, String title, Double spent, Double total, Integer progress, String color) {
+        this.id = id;
+        this.title = title;
+        this.spent = spent;
+        this.total = total;
+        this.progress = progress;
+        this.color = color;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Double getSpent() {
+        return spent;
+    }
+
+    public void setSpent(Double spent) {
+        this.spent = spent;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+}
