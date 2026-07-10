@@ -1,64 +1,35 @@
 import { Injectable } from '@angular/core';
-import usersData from '../data/users.json';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  users = usersData.users;
+  private apiUrl = 'http://localhost:8080/api/users';
 
-  /*login(email: string, password: string){
+  constructor(private http: HttpClient) { }
 
-    const user = this.users.find(
-      u =>
-      u.email === email &&
-      u.password === password
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap(response => {
+        if (response && response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+        }
+      })
     );
-
-    if(user){
-
-      localStorage.setItem(
-        'user',
-        JSON.stringify(user)
-      );
-
-      return true;
-    }
-
-    return false;
   }
 
-  logout(){
+  register(username: string, email: string, password: string): Observable<any> {
+    return this.http.post<any>(this.apiUrl, { username, email, password });
+  }
+
+  logout() {
     localStorage.removeItem('user');
   }
 
-  isLoggedIn(){
+  isLoggedIn() {
     return !!localStorage.getItem('user');
-  }*/
- login(email: string, password: string){
-
-  console.log('Email:', email);
-  console.log('Password:', password);
-  console.log('Usuarios:', this.users);
-
-  const user = this.users.find(
-    (u: any) =>
-      u.email === email &&
-      u.password === password
-  );
-
-  console.log('Usuario encontrado:', user);
-
-  if(user){
-    localStorage.setItem(
-      'user',
-      JSON.stringify(user)
-    );
-
-    return true;
   }
-
-  return false;
-}
 }

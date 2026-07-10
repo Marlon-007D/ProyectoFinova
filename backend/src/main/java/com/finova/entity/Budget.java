@@ -30,16 +30,21 @@ public class Budget {
 
     private String color;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Budget() {
     }
 
-    public Budget(Long id, String title, Double spent, Double total, Integer progress, String color) {
+    public Budget(Long id, String title, Double spent, Double total, Integer progress, String color, User user) {
         this.id = id;
         this.title = title;
         this.spent = spent;
         this.total = total;
         this.progress = progress;
         this.color = color;
+        this.user = user;
     }
 
     public Long getId() {
@@ -88,5 +93,13 @@ public class Budget {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

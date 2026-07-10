@@ -36,7 +36,8 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(Long id, LocalDate date, String description, String transactionType, Double amount, String color, BankAccount bankAccount) {
+    public Transaction(Long id, LocalDate date, String description, String transactionType, Double amount, String color,
+            BankAccount bankAccount) {
         this.id = id;
         this.date = date;
         this.description = description;

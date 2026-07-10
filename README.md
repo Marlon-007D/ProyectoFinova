@@ -19,12 +19,25 @@ FINOVA ayuda a:
 ## Framework seleccionado
 - Angular
 ## Tecnologías utilizadas
+### Frontend (Cliente)
 - Angular
 - TailwindCSS
 - TypeScript
 - Chart.js
 - HTML5
+
+### Backend (Servidor)
+- Java Spring Boot 3
+- Spring Data JPA
+- Hibernate
+- Maven
+
+### Base de Datos
+- PostgreSQL (Migrado desde MySQL)
+- PGAdmin 4
+
 ## Características principales
+- **NUEVO:** Sistema completo de Autenticación (Login y Registro) conectado a base de datos.
 - Dashboard financiero interactivo
 - Registro de movimientos
 - Gestión de presupuestos
@@ -33,33 +46,37 @@ FINOVA ayuda a:
 - Simulación de conexión bancaria
 - Navegación SPA
 - Diseño responsive
-## Instalación y ejecución
-Clonar el repositorio:
 
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
 ```bash
 git clone https://github.com/Marlon-007D/ProyectoFinova
-```
-
-Ingresar a la carpeta del proyecto:
-
-```bash
 cd FINOVA
 ```
 
-Instalar dependencias:
+### 2. Configurar Base de Datos (PostgreSQL)
+1. Abrir pgAdmin y crear una base de datos llamada `finova_db`.
+2. Modificar el archivo `backend/src/main/resources/application.properties` con tu contraseña local de Postgres:
+```ini
+spring.datasource.password=TU_CONTRASEÑA
+```
 
+### 3. Ejecutar el Backend (Spring Boot)
+Desde la carpeta `backend/`:
+```bash
+mvn spring-boot:run
+```
+El servidor backend se levantará en `http://localhost:8080`.
+
+### 4. Ejecutar el Frontend (Angular)
+Desde la raíz del proyecto (donde está el `package.json`):
 ```bash
 npm install
+npm run start
+# O usando Angular CLI: ng serve
 ```
-
-Ejecutar proyecto:
-
-```bash
-ng serve
-```
-
-Abrir en navegador:
-
+Abrir en el navegador:
 ```text
 http://localhost:4200
 ```

@@ -23,6 +23,6 @@ export class MainLayoutComponent {
 
   constructor(
     public theme: ThemeService
-  ){}
+  ) { }
 
 }

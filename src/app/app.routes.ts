@@ -6,12 +6,16 @@ import { BudgetsComponent } from './pages/budgets/budgets';
 import { SavingsComponent } from './pages/savings/savings';
 import { BanksComponent } from './pages/banks/banks';
 import { LoginComponent } from './pages/login/login';
+import { Register } from './pages/register/register';
 import { MainLayoutComponent } from './pages/main-layout/main-layout';
 import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: 'login', component: LoginComponent,
+  },
+  {
+    path: 'register', component: Register,
   },
   {
     path: '',

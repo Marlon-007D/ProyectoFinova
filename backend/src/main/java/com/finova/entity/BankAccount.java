@@ -26,15 +26,20 @@ public class BankAccount {
 
     private String color;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public BankAccount() {
     }
 
-    public BankAccount(Long id, String name, String accountType, Double balance, String color) {
+    public BankAccount(Long id, String name, String accountType, Double balance, String color, User user) {
         this.id = id;
         this.name = name;
         this.accountType = accountType;
         this.balance = balance;
         this.color = color;
+        this.user = user;
     }
 
     public Long getId() {
@@ -75,5 +80,13 @@ public class BankAccount {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

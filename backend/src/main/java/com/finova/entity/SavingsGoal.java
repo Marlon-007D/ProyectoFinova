@@ -33,10 +33,14 @@ public class SavingsGoal {
 
     private String color;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public SavingsGoal() {
     }
 
-    public SavingsGoal(Long id, String title, Double saved, Double total, Integer progress, Double remaining, String color) {
+    public SavingsGoal(Long id, String title, Double saved, Double total, Integer progress, Double remaining, String color, User user) {
         this.id = id;
         this.title = title;
         this.saved = saved;
@@ -44,6 +48,7 @@ public class SavingsGoal {
         this.progress = progress;
         this.remaining = remaining;
         this.color = color;
+        this.user = user;
     }
 
     public Long getId() {
@@ -100,5 +105,13 @@ public class SavingsGoal {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
