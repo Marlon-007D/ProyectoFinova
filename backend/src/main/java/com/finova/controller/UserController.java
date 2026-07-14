@@ -46,18 +46,4 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credentials) {
-        String email = credentials.get("email");
-        String password = credentials.get("password");
-        
-        User user = userService.login(email, password);
-        
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "Login exitoso");
-        response.put("user", user);
-        
-        return ResponseEntity.ok(response);
-    }
 }

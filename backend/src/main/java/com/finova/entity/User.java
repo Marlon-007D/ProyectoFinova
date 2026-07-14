@@ -25,7 +25,14 @@ public class User {
 
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @Column(name = "password_hash")
     private String password;
+
+    @Column(nullable = false)
+    private String role = "USER";
+
+    @Column(nullable = false)
+    private Boolean enabled = true;
 
     public User() {
     }
@@ -69,5 +76,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

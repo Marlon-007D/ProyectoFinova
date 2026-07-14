@@ -3,6 +3,7 @@ package com.finova.service;
 import com.finova.entity.User;
 import com.finova.exception.ResourceNotFoundException;
 import com.finova.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
@@ -26,8 +29,11 @@ public class UserService {
     }
 
     public User save(User user) {
-        // En una aplicación real la contraseña debería encriptarse con BCrypt, 
-        // pero para este proyecto básico se guarda tal cual.
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("USER");
+        }
+        user.setEnabled(true);
         return userRepository.save(user);
     }
 
@@ -36,18 +42,20 @@ public class UserService {
         user.setUsername(userDetails.getUsername());
         user.setEmail(userDetails.getEmail());
         if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
-            user.setPassword(userDetails.getPassword());
+            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        }
+        if (userDetails.getRole() != null && !userDetails.getRole().isEmpty()) {
+            user.setRole(userDetails.getRole());
+        }
+        if (userDetails.getEnabled() != null) {
+            user.setEnabled(userDetails.getEnabled());
         }
         return userRepository.save(user);
     }
 
     public void delete(Long id) {
         User user = findById(id);
-        userRepository.delete(user);
-    }
-
-    public User login(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password)
-                .orElseThrow(() -> new ResourceNotFoundException("Credenciales incorrectas"));
+        user.setEnabled(false); // Eliminación lógica
+        userRepository.save(user);
     }
 }

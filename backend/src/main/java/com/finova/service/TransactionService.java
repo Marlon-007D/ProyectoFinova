@@ -30,11 +30,26 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transacción no encontrada con id " + id));
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public Transaction save(Transaction transaction) {
         if (transaction.getBankAccount() != null && transaction.getBankAccount().getId() != null) {
             BankAccount bankAccount = bankAccountRepository.findById(transaction.getBankAccount().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Cuenta bancaria no encontrada con id " + transaction.getBankAccount().getId()));
+            
             transaction.setBankAccount(bankAccount);
+
+            // Update balance
+            double currentBalance = bankAccount.getBalance() != null ? bankAccount.getBalance() : 0.0;
+            if ("INGRESO".equalsIgnoreCase(transaction.getTransactionType())) {
+                bankAccount.setBalance(currentBalance + transaction.getAmount());
+            } else if ("EGRESO".equalsIgnoreCase(transaction.getTransactionType())) {
+                if (currentBalance < transaction.getAmount()) {
+                    throw new IllegalArgumentException("Saldo insuficiente en la cuenta para realizar el egreso.");
+                }
+                bankAccount.setBalance(currentBalance - transaction.getAmount());
+            }
+
+            bankAccountRepository.save(bankAccount);
         }
         return transactionRepository.save(transaction);
     }
