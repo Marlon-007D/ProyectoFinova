@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "savings_goal")
+@Table(name = "savings_goals")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SavingsGoal {
 
     @Id
@@ -36,6 +39,8 @@ public class SavingsGoal {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    private Boolean active = true;
 
     public SavingsGoal() {
     }
@@ -113,5 +118,13 @@ public class SavingsGoal {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

@@ -1,8 +1,10 @@
 package com.finova.service;
 
 import com.finova.entity.Budget;
+import com.finova.entity.User;
 import com.finova.exception.ResourceNotFoundException;
 import com.finova.repository.BudgetRepository;
+import com.finova.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,13 +13,15 @@ import java.util.List;
 public class BudgetService {
 
     private final BudgetRepository budgetRepository;
+    private final UserRepository userRepository;
 
-    public BudgetService(BudgetRepository budgetRepository) {
+    public BudgetService(BudgetRepository budgetRepository, UserRepository userRepository) {
         this.budgetRepository = budgetRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<Budget> findAll() {
-        return budgetRepository.findAll();
+    public List<Budget> findAllActiveByUsername(String username) {
+        return budgetRepository.findByUser_UsernameAndActiveTrue(username);
     }
 
     public Budget findById(Long id) {
@@ -25,12 +29,19 @@ public class BudgetService {
                 .orElseThrow(() -> new ResourceNotFoundException("Presupuesto no encontrado con id " + id));
     }
 
-    public Budget save(Budget budget) {
+    public Budget save(Budget budget, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        budget.setUser(user);
+        budget.setActive(true);
         return budgetRepository.save(budget);
     }
 
-    public Budget update(Long id, Budget budgetData) {
+    public Budget update(Long id, Budget budgetData, String username) {
         Budget existing = findById(id);
+        if (!existing.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("No tienes permiso para editar este presupuesto");
+        }
         existing.setTitle(budgetData.getTitle());
         existing.setSpent(budgetData.getSpent());
         existing.setTotal(budgetData.getTotal());
@@ -39,8 +50,13 @@ public class BudgetService {
         return budgetRepository.save(existing);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, String username) {
         Budget existing = findById(id);
-        budgetRepository.delete(existing);
+        if (!existing.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("No tienes permiso para eliminar este presupuesto");
+        }
+        // Logical delete
+        existing.setActive(false);
+        budgetRepository.save(existing);
     }
 }

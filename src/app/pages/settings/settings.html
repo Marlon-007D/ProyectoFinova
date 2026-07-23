@@ -1,0 +1,187 @@
+<div class="p-6 max-w-4xl mx-auto space-y-8 animate-fade-in">
+  
+  <div>
+    <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Configuración</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1">Gestiona tu perfil, preferencias visuales y cuenta</p>
+  </div>
+
+  <div *ngIf="message" [ngClass]="isError ? 'bg-red-50 text-red-600 border-red-200 dark:bg-red-900/30 dark:border-red-800' : 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800'" class="p-4 rounded-xl border flex items-center gap-3 animate-fade-in">
+    <svg *ngIf="!isError" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <svg *ngIf="isError" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span class="font-medium">{{ message }}</span>
+  </div>
+
+  <div class="flex gap-2 border-b border-slate-200 dark:border-slate-700">
+    <button (click)="activeTab = 'profile'" [ngClass]="activeTab === 'profile' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 border-b-2 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="px-4 py-3 transition-colors">
+      Perfil
+    </button>
+    <button (click)="activeTab = 'appearance'" [ngClass]="activeTab === 'appearance' ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400 border-b-2 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="px-4 py-3 transition-colors">
+      Apariencia
+    </button>
+    <button (click)="activeTab = 'danger'" [ngClass]="activeTab === 'danger' ? 'border-rose-500 text-rose-600 dark:text-rose-400 border-b-2 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'" class="px-4 py-3 transition-colors">
+      Eliminar o suspender cuenta
+    </button>
+  </div>
+
+  <!-- TABS CONTENT -->
+  
+  <!-- Profile Tab -->
+  <div *ngIf="activeTab === 'profile'" class="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 space-y-8 animate-fade-in">
+    
+    <div class="flex items-center gap-6">
+      <div class="relative w-24 h-24 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 border-4 border-white dark:border-slate-800 shadow-lg flex items-center justify-center shrink-0">
+        <img *ngIf="userProfile.profilePicture" [src]="userProfile.profilePicture" class="w-full h-full object-cover" alt="Profile">
+        <span *ngIf="!userProfile.profilePicture" class="text-3xl font-bold text-slate-400 dark:text-slate-500">{{ userProfile.username ? userProfile.username[0].toUpperCase() : 'U' }}</span>
+      </div>
+      <div>
+        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Foto de Perfil</h3>
+        <label class="cursor-pointer bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-4 py-2 rounded-lg font-medium hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors inline-block">
+          Subir nueva foto
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden">
+        </label>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="space-y-2">
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Nombre de Usuario</label>
+        <input type="text" [(ngModel)]="userProfile.username" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+      </div>
+      
+      <div class="space-y-2">
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Correo Electrónico</label>
+        <input type="email" [(ngModel)]="userProfile.email" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+      </div>
+
+      <div class="space-y-2 md:col-span-2">
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Nueva Contraseña (Opcional)</label>
+        <input type="password" [(ngModel)]="userProfile.password" placeholder="Dejar en blanco para mantener la actual" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+      </div>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button (click)="saveProfile()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform hover:-translate-y-1">
+        Guardar Cambios
+      </button>
+    </div>
+  </div>
+
+  <!-- Appearance Tab -->
+  <div *ngIf="activeTab === 'appearance'" class="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700 space-y-8 animate-fade-in">
+    
+    <div class="space-y-4">
+      <h3 class="text-lg font-bold text-slate-800 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-2">Tamaño de Texto</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <label [ngClass]="preferences.fontSize === 'small' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex items-center justify-center">
+          <input type="radio" name="fontSize" value="small" [(ngModel)]="preferences.fontSize" class="hidden">
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Pequeño (A-)</span>
+        </label>
+        
+        <label [ngClass]="preferences.fontSize === 'normal' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex items-center justify-center">
+          <input type="radio" name="fontSize" value="normal" [(ngModel)]="preferences.fontSize" class="hidden">
+          <span class="text-base font-medium text-slate-700 dark:text-slate-300">Normal (A)</span>
+        </label>
+
+        <label [ngClass]="preferences.fontSize === 'large' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex items-center justify-center">
+          <input type="radio" name="fontSize" value="large" [(ngModel)]="preferences.fontSize" class="hidden">
+          <span class="text-lg font-medium text-slate-700 dark:text-slate-300">Grande (A+)</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-bold text-slate-800 dark:text-white border-b border-slate-100 dark:border-slate-700 pb-2">Tipografía (Fuente)</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <label [ngClass]="preferences.fontFamily === 'Inter' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex flex-col items-center justify-center gap-1" style="font-family: 'Inter', sans-serif">
+          <input type="radio" name="fontFamily" value="Inter" [(ngModel)]="preferences.fontFamily" class="hidden">
+          <span class="font-bold text-slate-700 dark:text-slate-300">Inter</span>
+          <span class="text-xs text-slate-400">Moderna</span>
+        </label>
+        
+        <label [ngClass]="preferences.fontFamily === 'Roboto' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex flex-col items-center justify-center gap-1" style="font-family: 'Roboto', sans-serif">
+          <input type="radio" name="fontFamily" value="Roboto" [(ngModel)]="preferences.fontFamily" class="hidden">
+          <span class="font-bold text-slate-700 dark:text-slate-300">Roboto</span>
+          <span class="text-xs text-slate-400">Clásica</span>
+        </label>
+
+        <label [ngClass]="preferences.fontFamily === 'Monospace' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-700'" class="border-2 rounded-xl p-4 cursor-pointer hover:border-emerald-400 transition-colors flex flex-col items-center justify-center gap-1" style="font-family: monospace">
+          <input type="radio" name="fontFamily" value="Monospace" [(ngModel)]="preferences.fontFamily" class="hidden">
+          <span class="font-bold text-slate-700 dark:text-slate-300">Monospace</span>
+          <span class="text-xs text-slate-400">Técnica</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex justify-end pt-4">
+      <button (click)="savePreferences()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-emerald-500/30 transition-all transform hover:-translate-y-1">
+        Aplicar Apariencia
+      </button>
+    </div>
+  </div>
+
+  <!-- Eliminar o suspender cuenta Tab -->
+  <div *ngIf="activeTab === 'danger'" class="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-rose-100 dark:border-rose-900/30 space-y-8 animate-fade-in">
+    
+    <div>
+      <h3 class="text-xl font-bold text-rose-600 dark:text-rose-500 mb-2">Suspender Cuenta</h3>
+      <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">Si suspendes tu cuenta, ya no podrás iniciar sesión. Sin embargo, tus datos financieros se mantendrán intactos. Deberás contactar a un administrador si deseas reactivarla en el futuro.</p>
+      <button (click)="openDangerModal('suspend')" class="px-6 py-3 bg-amber-500/10 text-amber-600 font-bold rounded-xl hover:bg-amber-500/20 transition-colors">
+        Suspender Cuenta
+      </button>
+    </div>
+
+    <div class="p-6 bg-rose-50 dark:bg-rose-900/10 rounded-2xl border border-rose-200 dark:border-rose-900/30">
+      <h3 class="text-xl font-bold text-rose-700 dark:text-rose-400 mb-2">Eliminación Permanente</h3>
+      <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+        Al eliminar tu cuenta, se borrarán de forma irreversible todos tus registros financieros, metas de ahorro y presupuestos.
+      </p>
+      <button (click)="openDangerModal('delete')" class="px-6 py-3 bg-rose-600 text-white font-bold rounded-xl hover:bg-rose-700 transition-colors">
+        Eliminar Cuenta
+      </button>
+    </div>
+
+  </div>
+
+  <!-- MODAL PELIGRO (SUSPENDER / ELIMINAR) -->
+  <div *ngIf="isDangerModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" (click)="!isSubmittingDanger ? cancelDangerAction() : null"></div>
+    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-700 p-6 space-y-6 text-center">
+      
+      <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" [ngClass]="dangerActionType === 'delete' ? 'bg-rose-100 dark:bg-rose-900/30' : 'bg-amber-100 dark:bg-amber-900/30'">
+        <svg *ngIf="dangerActionType === 'delete'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-rose-600 dark:text-rose-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <svg *ngIf="dangerActionType === 'suspend'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-amber-600 dark:text-amber-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+          {{ dangerActionType === 'delete' ? 'Eliminar Cuenta' : 'Suspender Cuenta' }}
+        </h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">
+          {{ dangerActionType === 'delete' 
+            ? 'PELIGRO: ¿Estás ABSOLUTAMENTE seguro de que deseas eliminar tu cuenta? Esta acción es irreversible y perderás todo.'
+            : '¿Estás seguro de que deseas suspender tu cuenta? No podrás volver a entrar hasta que un administrador la restaure.' 
+          }}
+        </p>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button (click)="cancelDangerAction()" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 rounded-xl transition-colors">
+          Cancelar
+        </button>
+        <button 
+          [disabled]="isSubmittingDanger"
+          (click)="confirmDangerAction()" 
+          class="flex-1 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all"
+          [ngClass]="dangerActionType === 'delete' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-amber-600 hover:bg-amber-700'"
+        >
+          {{ isSubmittingDanger ? 'Procesando...' : (dangerActionType === 'delete' ? 'Eliminar' : 'Suspender') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

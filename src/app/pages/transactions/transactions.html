@@ -6,7 +6,7 @@
       Movimientos
     </h1>
 
-    <button class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-200 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/30">
+    <button (click)="openModal()" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 active:scale-95 transition-all duration-200 text-white font-bold px-6 py-3 rounded-xl shadow-lg shadow-emerald-500/30">
 
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -18,6 +18,36 @@
   </div>
 
   <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+    
+    <!-- CONTROLES DE FILTRADO -->
+    <div class="p-5 border-b border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col md:flex-row gap-4 items-center justify-between">
+      
+      <div class="flex-1 w-full relative">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+        </svg>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onFilterChange()" placeholder="Buscar por descripción o banco..." class="w-full pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+      </div>
+
+      <div class="flex w-full md:w-auto gap-3 items-center overflow-x-auto pb-2 md:pb-0">
+        <select [(ngModel)]="filterType" (change)="onFilterChange()" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+          <option value="TODOS">Todos los tipos</option>
+          <option value="INGRESO">Ingresos</option>
+          <option value="EGRESO">Egresos</option>
+        </select>
+        
+        <div class="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+          <span class="text-xs text-slate-500 font-bold uppercase">Desde</span>
+          <input type="date" [(ngModel)]="filterStartDate" (change)="onFilterChange()" class="bg-transparent text-sm focus:outline-none dark:text-slate-200">
+        </div>
+
+        <div class="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+          <span class="text-xs text-slate-500 font-bold uppercase">Hasta</span>
+          <input type="date" [(ngModel)]="filterEndDate" (change)="onFilterChange()" class="bg-transparent text-sm focus:outline-none dark:text-slate-200">
+        </div>
+      </div>
+      
+    </div>
 
     <div class="overflow-x-auto">
 
@@ -38,8 +68,15 @@
               Tipo
             </th>
 
+            <th class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400 p-5">
+              Cuenta
+            </th>
+
             <th class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400 p-5 text-right">
               Monto
+            </th>
+            <th class="text-xs uppercase tracking-wider font-semibold text-slate-500 dark:text-slate-400 p-5 text-right">
+              Acciones
             </th>
           </tr>
 
@@ -48,7 +85,7 @@
         <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
 
           <tr
-            *ngFor="let item of transactions"
+            *ngFor="let item of paginatedTransactions"
             class="hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors group"
           >
 
@@ -70,7 +107,9 @@
                     'bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400': item.color === 'violet'
                   }"
                 >
-                  💰
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
 
                 <span class="text-sm font-bold text-slate-800 dark:text-white">
@@ -86,23 +125,35 @@
               <span
                 class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border"
                 [ngClass]="{
-                  'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-800': item.type === 'Gasto',
-                  'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800': item.type === 'Ingreso'
+                  'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-800': item.transactionType === 'EGRESO' || item.transactionType === 'GASTO',
+                  'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800': item.transactionType === 'INGRESO'
                 }"
               >
-                {{ item.type }}
+                {{ item.transactionType }}
               </span>
 
+            </td>
+
+            <td class="p-5">
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300">
+                {{ item.bankAccount.name || '---' }}
+              </span>
             </td>
 
             <td
               class="p-5 text-right text-sm font-black"
               [ngClass]="{
-                'text-rose-600 dark:text-rose-400': item.type === 'Gasto',
-                'text-emerald-600 dark:text-emerald-400': item.type === 'Ingreso'
+                'text-rose-600 dark:text-rose-400': item.transactionType === 'EGRESO' || item.transactionType === 'GASTO',
+                'text-emerald-600 dark:text-emerald-400': item.transactionType === 'INGRESO'
               }"
             >
               {{ item.amount }}
+            </td>
+
+            <td class="p-5 text-right">
+              <button (click)="deleteTransaction(item.id)" class="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-bold text-sm bg-rose-50 hover:bg-rose-100 dark:bg-rose-900/20 dark:hover:bg-rose-900/40 px-3 py-1.5 rounded-lg transition-colors">
+                Eliminar
+              </button>
             </td>
 
           </tr>
@@ -111,8 +162,160 @@
 
       </table>
 
+      <!-- Empty State for Filters -->
+      <div *ngIf="filteredTransactions.length === 0" class="p-12 flex flex-col items-center justify-center text-center">
+        <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-400">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">No se encontraron movimientos</h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Intenta ajustando los filtros de búsqueda o fechas.</p>
+      </div>
+
     </div>
 
+    <!-- PAGINACIÓN -->
+    <div *ngIf="filteredTransactions.length > 0" class="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">
+        Mostrando <span class="font-bold text-slate-900 dark:text-white">{{ (currentPage - 1) * pageSize + 1 }}</span> a 
+        <span class="font-bold text-slate-900 dark:text-white">{{ Math.min(currentPage * pageSize, filteredTransactions.length) }}</span> de 
+        <span class="font-bold text-slate-900 dark:text-white">{{ filteredTransactions.length }}</span> resultados
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <div class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-800 dark:text-slate-200">
+          Página {{ currentPage }} de {{ totalPages }}
+        </div>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL ELIMINAR -->
+  <div *ngIf="isDeleteModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" (click)="!isDeleting ? cancelDelete() : null"></div>
+    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-700 p-6 space-y-6 text-center">
+      
+      <div class="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-rose-600 dark:text-rose-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Eliminar Movimiento</h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">
+          ¿Estás seguro de eliminar este movimiento? Esta acción no se puede deshacer.
+        </p>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button (click)="cancelDelete()" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 rounded-xl transition-colors">
+          Cancelar
+        </button>
+        <button 
+          [disabled]="isDeleting"
+          (click)="confirmDelete()" 
+          class="flex-1 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all">
+          {{ isDeleting ? 'Eliminando...' : 'Eliminar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" (click)="closeModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-700">
+      
+      <div class="p-6 md:p-8 space-y-6">
+        
+        <div class="flex justify-between items-center">
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white">Nuevo Movimiento</h3>
+          <button (click)="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div *ngIf="banks.length === 0" class="flex items-center gap-3 bg-amber-50 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 p-4 rounded-xl text-sm font-medium border border-amber-200 dark:border-amber-800">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          No tienes cuentas bancarias registradas. Por favor, crea una en la sección "Bancos" antes de añadir movimientos.
+        </div>
+
+        <div *ngIf="banks.length > 0" class="space-y-4">
+          
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Tipo de Movimiento</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label [ngClass]="newTransaction.transactionType === 'INGRESO' ? 'border-emerald-500 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'" class="border-2 rounded-xl p-3 cursor-pointer text-center font-bold transition-all">
+                <input type="radio" name="type" value="INGRESO" [(ngModel)]="newTransaction.transactionType" class="hidden">
+                INGRESO
+              </label>
+              <label [ngClass]="newTransaction.transactionType === 'EGRESO' ? 'border-rose-500 bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'" class="border-2 rounded-xl p-3 cursor-pointer text-center font-bold transition-all">
+                <input type="radio" name="type" value="EGRESO" [(ngModel)]="newTransaction.transactionType" class="hidden">
+                EGRESO
+              </label>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Cuenta / Cartera</label>
+            <select [(ngModel)]="newTransaction.bankAccountId" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+              <option *ngFor="let b of banks" [value]="b.id">{{ b.name }} ({{ b.balance }})</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Monto</label>
+              <input type="number" [(ngModel)]="newTransaction.amount" placeholder="0.00" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
+            
+            <div class="space-y-2">
+              <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Fecha</label>
+              <input type="date" [(ngModel)]="newTransaction.date" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Descripción</label>
+            <input type="text" [(ngModel)]="newTransaction.description" placeholder="Ej. Compra de supermercado" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+          </div>
+
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button (click)="closeModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 px-4 rounded-xl transition-colors">
+            Cancelar
+          </button>
+          <button 
+            [disabled]="banks.length === 0 || isSubmitting || !newTransaction.amount || !newTransaction.description"
+            (click)="createTransaction()" 
+            class="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-500/30 transition-all">
+            {{ isSubmitting ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
   </div>
 
 </div>

@@ -1,8 +1,10 @@
 package com.finova.service;
 
 import com.finova.entity.SavingsGoal;
+import com.finova.entity.User;
 import com.finova.exception.ResourceNotFoundException;
 import com.finova.repository.SavingsGoalRepository;
+import com.finova.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,13 +13,15 @@ import java.util.List;
 public class SavingsGoalService {
 
     private final SavingsGoalRepository savingsGoalRepository;
+    private final UserRepository userRepository;
 
-    public SavingsGoalService(SavingsGoalRepository savingsGoalRepository) {
+    public SavingsGoalService(SavingsGoalRepository savingsGoalRepository, UserRepository userRepository) {
         this.savingsGoalRepository = savingsGoalRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<SavingsGoal> findAll() {
-        return savingsGoalRepository.findAll();
+    public List<SavingsGoal> findAllActiveByUsername(String username) {
+        return savingsGoalRepository.findByUser_UsernameAndActiveTrue(username);
     }
 
     public SavingsGoal findById(Long id) {
@@ -25,23 +29,35 @@ public class SavingsGoalService {
                 .orElseThrow(() -> new ResourceNotFoundException("Meta de ahorro no encontrada con id " + id));
     }
 
-    public SavingsGoal save(SavingsGoal savingsGoal) {
+    public SavingsGoal save(SavingsGoal savingsGoal, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+        savingsGoal.setUser(user);
+        savingsGoal.setActive(true);
         return savingsGoalRepository.save(savingsGoal);
     }
 
-    public SavingsGoal update(Long id, SavingsGoal savingsGoalData) {
+    public SavingsGoal update(Long id, SavingsGoal savingsData, String username) {
         SavingsGoal existing = findById(id);
-        existing.setTitle(savingsGoalData.getTitle());
-        existing.setSaved(savingsGoalData.getSaved());
-        existing.setTotal(savingsGoalData.getTotal());
-        existing.setProgress(savingsGoalData.getProgress());
-        existing.setRemaining(savingsGoalData.getRemaining());
-        existing.setColor(savingsGoalData.getColor());
+        if (!existing.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("No tienes permiso para editar esta meta de ahorro");
+        }
+        existing.setTitle(savingsData.getTitle());
+        existing.setSaved(savingsData.getSaved());
+        existing.setTotal(savingsData.getTotal());
+        existing.setProgress(savingsData.getProgress());
+        existing.setRemaining(savingsData.getRemaining());
+        existing.setColor(savingsData.getColor());
         return savingsGoalRepository.save(existing);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, String username) {
         SavingsGoal existing = findById(id);
-        savingsGoalRepository.delete(existing);
+        if (!existing.getUser().getUsername().equals(username)) {
+            throw new IllegalArgumentException("No tienes permiso para eliminar esta meta de ahorro");
+        }
+        // Logical delete
+        existing.setActive(false);
+        savingsGoalRepository.save(existing);
     }
 }

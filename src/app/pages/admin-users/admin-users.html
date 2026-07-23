@@ -1,0 +1,86 @@
+<div class="p-6 md:p-8 max-w-7xl mx-auto space-y-8 animate-fade-in font-sans">
+  
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Gestión de Usuarios</h1>
+      <p class="text-slate-500 font-medium mt-1">Administra las cuentas de la plataforma Finova</p>
+    </div>
+  </div>
+
+  <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-slate-200/40 relative overflow-hidden">
+    
+    <!-- Loader -->
+    <div *ngIf="isLoading" class="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b border-slate-200">
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600">ID</th>
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600">Usuario</th>
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600">Correo</th>
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600">Rol</th>
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600 text-center">Estado</th>
+            <th class="py-4 px-4 text-sm font-semibold text-slate-600 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr *ngFor="let user of users" class="hover:bg-slate-50/80 transition-colors group">
+            <td class="py-4 px-4 text-sm text-slate-500 font-medium">#{{ user.id }}</td>
+            <td class="py-4 px-4">
+              <span class="text-sm font-bold text-slate-800">{{ user.username }}</span>
+            </td>
+            <td class="py-4 px-4 text-sm text-slate-500">{{ user.email }}</td>
+            <td class="py-4 px-4">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="user.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td class="py-4 px-4 text-center">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="user.enabled ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'">
+                {{ user.enabled ? 'ACTIVO' : 'INACTIVO' }}
+              </span>
+            </td>
+            <td class="py-4 px-4 text-center">
+              <button *ngIf="user.role !== 'ADMIN'" (click)="toggleStatus(user)"
+                class="text-xs font-bold px-3 py-1.5 rounded-lg transition-all duration-200"
+                [ngClass]="user.enabled ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'">
+                {{ user.enabled ? 'Desactivar' : 'Activar' }}
+              </button>
+            </td>
+          </tr>
+          
+          <tr *ngIf="users.length === 0 && !isLoading">
+            <td colspan="6" class="py-12 text-center text-slate-500">
+              No hay usuarios registrados.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-6">
+      <p class="text-sm text-slate-500">
+        Página <span class="font-bold text-slate-700">{{ currentPage + 1 }}</span> de <span class="font-bold text-slate-700">{{ totalPages || 1 }}</span>
+      </p>
+      <div class="flex gap-2">
+        <button (click)="prevPage()" [disabled]="currentPage === 0"
+          class="px-4 py-2 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          [ngClass]="currentPage === 0 ? 'bg-slate-100 text-slate-400' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+          Anterior
+        </button>
+        <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1"
+          class="px-4 py-2 text-sm font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          [ngClass]="currentPage >= totalPages - 1 ? 'bg-slate-100 text-slate-400' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

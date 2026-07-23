@@ -1,8 +1,17 @@
 <div class="max-w-7xl mx-auto p-4 md:p-8 text-slate-800 dark:text-slate-100">
   
-  <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-8">
-    Cuentas Bancarias
-  </h1>
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+      Cuentas Bancarias
+    </h1>
+
+    <button (click)="openCreateModal()" class="flex items-center gap-2 bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 active:scale-95 transition-all duration-200 text-white font-bold px-6 py-3 rounded-xl shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Vincular Cuenta
+    </button>
+  </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
@@ -60,22 +69,57 @@
         </div>
 
         <p class="text-slate-500 dark:text-slate-400 text-sm font-medium mb-6 ml-14">
-          {{ bank.type }}
+          {{ bank.accountType }}
         </p>
 
-        <h3 class="text-4xl font-black text-slate-800 dark:text-white mb-8 tracking-tight">
-          {{ bank.balance }}
-        </h3>
+        <div class="flex items-center gap-1 mb-8">
+          <span class="text-3xl font-bold text-slate-400 dark:text-slate-500">$</span>
+          <h3 class="text-4xl font-black text-slate-800 dark:text-white tracking-tight">
+            {{ bank.balance | number:'1.2-2' }}
+          </h3>
+        </div>
+
+        <div class="mt-auto grid grid-cols-2 gap-3 mb-2 w-full">
+          <button
+            routerLink="/transactions"
+            class="font-semibold py-3 rounded-xl transition-colors duration-200"
+            [ngClass]="{
+              'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 dark:text-emerald-400': bank.color === 'emerald',
+              'bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-400': bank.color === 'blue',
+              'bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:text-amber-400': bank.color === 'amber',
+              'bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 dark:text-rose-400': bank.color === 'rose',
+              'bg-red-50 hover:bg-red-100 text-red-700 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400': bank.color === 'red'
+            }"
+          >
+            Ver movimientos
+          </button>
+          
+          <button
+            (click)="syncBank(bank)"
+            [disabled]="isSyncingId === bank.id"
+            class="font-semibold py-3 rounded-xl transition-all duration-200 bg-slate-100 hover:bg-slate-200 text-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-200 disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            <svg *ngIf="isSyncingId === bank.id" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <svg *ngIf="isSyncingId !== bank.id" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+            {{ isSyncingId === bank.id ? 'Sync...' : 'Sincronizar' }}
+          </button>
+        </div>
+
+        <!-- Sync Toast Message (Absolute positioned within the card) -->
+        <div *ngIf="syncMessageBankId === bank.id" class="absolute bottom-4 left-0 right-0 flex justify-center animate-fade-in pointer-events-none z-10 px-4">
+          <div class="bg-slate-900/90 backdrop-blur text-white text-xs font-semibold py-2 px-4 rounded-full shadow-xl max-w-full text-center">
+            {{ syncMessage }}
+          </div>
+        </div>
 
         <button
-          class="mt-auto w-full font-semibold py-3 rounded-xl transition-colors duration-200"
-          [ngClass]="{
-            'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 dark:text-emerald-400': bank.color === 'emerald',
-            'bg-blue-50 hover:bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-400': bank.color === 'blue',
-            'bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:text-amber-400': bank.color === 'amber'
-          }"
+          (click)="deleteBank(bank.id)"
+          class="mt-2 w-full font-semibold py-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors duration-200 dark:text-rose-400 dark:bg-rose-900/20 dark:hover:bg-rose-900/40"
         >
-          Ver movimientos
+          Eliminar Cuenta
         </button>
 
       </div>
@@ -83,4 +127,123 @@
     }
 
   </div>
+
+  <!-- MODAL VINCULAR CUENTA -->
+  <div *ngIf="isCreateModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" (click)="!isConnecting && !isSubmittingCreate ? closeCreateModal() : null"></div>
+    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-700 p-6 space-y-6">
+      
+      <!-- CONTENIDO NORMAL -->
+      <ng-container *ngIf="!isConnecting">
+        <div class="flex justify-between items-center">
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white">Vincular Cuenta</h3>
+          <button (click)="closeCreateModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Institución Bancaria</label>
+            <select [(ngModel)]="selectedInstitution" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+              <option value="" disabled selected>Selecciona tu banco</option>
+              <option *ngFor="let inst of institutions" [value]="inst.name">{{ inst.name }}</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Tipo de Cuenta</label>
+            <select [(ngModel)]="accountType" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+              <option value="Ahorros">Ahorros</option>
+              <option value="Corriente">Corriente</option>
+              <option value="Efectivo">Billetera / Efectivo</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Número de Cuenta</label>
+            <input type="text" [(ngModel)]="accountNumber" placeholder="Ej: 1234567890 (10 dígitos)" maxlength="10" (keypress)="onNumberOnly($event)" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 font-mono tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+            <p *ngIf="accountNumber && !isAccountValid" class="text-xs text-rose-500 font-medium mt-1">El número debe tener exactamente 10 dígitos numéricos.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Número de Tarjeta de Débito/Crédito</label>
+            <input type="text" [(ngModel)]="cardNumber" placeholder="Ej: 4111222233334444" maxlength="16" (keypress)="onNumberOnly($event)" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 font-mono tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+            <p *ngIf="cardNumber && !isCardValid" class="text-xs text-rose-500 font-medium mt-1">Debe tener 16 dígitos.</p>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="space-y-2 flex-1">
+              <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Caducidad</label>
+              <input type="text" [(ngModel)]="expiryDate" placeholder="MM/YY" maxlength="5" (input)="formatExpiryDate($event)" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 font-mono text-center tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+              <p *ngIf="expiryDate && !isExpiryValid" class="text-xs text-rose-500 font-medium mt-1">Mes inválido.</p>
+            </div>
+
+            <div class="space-y-2 flex-1">
+              <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">CVV</label>
+              <input type="password" [(ngModel)]="cvv" placeholder="***" maxlength="3" (keypress)="onNumberOnly($event)" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-200 font-mono text-center tracking-widest focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400">
+              <p *ngIf="cvv && !isCvvValid" class="text-xs text-rose-500 font-medium mt-1">Requiere 3 dígitos.</p>
+            </div>
+          </div>
+          <p *ngIf="accountError" class="text-xs text-rose-500 font-bold mt-1 text-center">{{ accountError }}</p>
+        </div>
+
+        <div class="pt-4 flex gap-3">
+          <button (click)="closeCreateModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 px-4 rounded-xl transition-colors">Cancelar</button>
+          <button 
+            [disabled]="!selectedInstitution || !isAccountValid || !isCardValid || !isExpiryValid || !isCvvValid || !accountType || isSubmittingCreate"
+            (click)="createBank()" 
+            class="flex-1 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 disabled:opacity-50 text-white font-bold py-3 px-4 rounded-xl transition-all">
+            {{ isSubmittingCreate ? 'Creando...' : 'Vincular' }}
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- PANTALLA DE CARGA (SIMULANDO CONEXIÓN BANCARIA) -->
+      <div *ngIf="isConnecting" class="flex flex-col items-center justify-center py-10 space-y-6">
+        <div class="relative w-20 h-20">
+          <div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-700 rounded-full"></div>
+          <div class="absolute inset-0 border-4 border-slate-900 dark:border-slate-100 rounded-full border-t-transparent dark:border-t-transparent animate-spin"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white">Conectando...</h3>
+          <p class="text-sm text-slate-500 mt-2">Sincronizando saldo con {{ selectedInstitution }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL ELIMINAR -->
+  <div *ngIf="isDeleteModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" (click)="!isDeleting ? cancelDelete() : null"></div>
+    <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-700 p-6 space-y-6 text-center">
+      
+      <div class="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-rose-600 dark:text-rose-400">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Eliminar Cuenta Bancaria</h3>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">
+          ¿Estás seguro de eliminar esta cuenta? Se perderá el enlace.
+        </p>
+      </div>
+
+      <div class="flex gap-3 pt-2">
+        <button (click)="cancelDelete()" class="flex-1 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white font-bold py-3 rounded-xl transition-colors">
+          Cancelar
+        </button>
+        <button 
+          [disabled]="isDeleting"
+          (click)="confirmDelete()" 
+          class="flex-1 bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-all">
+          {{ isDeleting ? 'Eliminando...' : 'Eliminar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
